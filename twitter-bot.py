@@ -13,6 +13,7 @@ app = Flask(__name__)
 
 print("Connected to twitterrr......")
 
+# Get WOEID of given location
 def getWoeidOfLocation(location):
     client = yweather.Client()
     return client.fetch_woeid(location)
@@ -60,9 +61,4 @@ def getLocationTrends(location="world", nTrend=10):
 
 if __name__ == '__main__':
    app.run(port=8080)
-#json_msg = json.loads(getTweetsFromUser("monicbhanushali"))
-#print("===================================\n")
-#print(json_msg['tweets'][0]['text'])
-#print("Top 10 trending topics in " + location + ": \n")
-#print(getLocationTrends(location))
 
