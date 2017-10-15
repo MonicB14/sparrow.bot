@@ -2,26 +2,31 @@ import tweepy
 import yweather
 import simplejson as json
 
+from flask import Flask
 from config import *
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
-print("Connected to twitter......")
+app = Flask(__name__)
+
+print("Connected to twitterrr......")
 
 def getWoeidOfLocation(location):
     client = yweather.Client()
     return client.fetch_woeid(location)
 
 #Get last tweet from specified username
+@app.route('/getlasttweet/<username>')
 def getLastTweetFromUser( username="monicbhanushali" , nTweets=1, retweets = False):
         last_tweet = json.loads(getTweetsFromUser(username, 1, True))
-        result = last_tweet['tweets'][0]['text']
+        result = last_tweet['tweets'][0]
         #print("Last tweet from " + username + ": " + last_tweet[0] )
         return json.dumps(result);
 
 #Get tweets from given username
+@app.route('/gettweets')
 def getTweetsFromUser(username="monicbhanushali", nTweets=10, retweets=False):
     all_tweets = api.user_timeline(screen_name = username, count = nTweets, include_rts = retweets)
     result = []
@@ -33,6 +38,31 @@ def getTweetsFromUser(username="monicbhanushali", nTweets=10, retweets=False):
     #print(json.dumps({"tweets":json_response}))
     return json.dumps({"tweets":json_response})
 
-json_msg = getTweetsFromUser("monicbhanushali")
-print(json_msg)
+#Get trends of a particular location
+@app.route('/getlocationtrends/<location>')
+def getLocationTrends(location="world", nTrend=10):
+    response=0
+    woeid = 1
+    json_response = []
+    if( location == "world"):
+        response = api.trends_place(woeid)
+    else:
+        response =  api.trends_place(getWoeidOfLocation(location))
+    data = response[0]
+    trends = data['trends']
+    trends = trends[0:10]
+    #print(trends)
+    for trend in trends:
+        json_response.append({"name":trend['name'],"url":trend['url']})
+    trending_topics = [trend['name'] for trend in trends]
+    print(json_response)
+    return json.dumps({"trends":json_response})
+
+if __name__ == '__main__':
+   app.run(port=8080)
+#json_msg = json.loads(getTweetsFromUser("monicbhanushali"))
+#print("===================================\n")
+#print(json_msg['tweets'][0]['text'])
+#print("Top 10 trending topics in " + location + ": \n")
+#print(getLocationTrends(location))
 
