@@ -1,4 +1,4 @@
-# tweegram
+# Sparrow
 
 ## Description
-A Twitter Bot to 
+A Telegram bot to fetch data from twitter. 
