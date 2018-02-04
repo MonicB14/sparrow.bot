@@ -9,4 +9,7 @@ _Try Sparrow [here](https://t.me/tweegram_smartbot)._
 Sparrow supports a limited set of commands, here are they
  - /help : Lists the commands supported by Sparrow
  - /locationtrend \[locationname\] : Gets trending twitter topics for the specified location.
- - /lasttweet \[twitter_handle\] : Gets the last tweet for the specified handle. By default it return my last tweet :laughing:
+ - /lasttweet \[twitter_handle\] : Gets the last tweet for the specified handle. By default it returns my last tweet :P
+ 
+ 
+ 
